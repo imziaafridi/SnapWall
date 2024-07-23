@@ -1,13 +1,15 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/configs/color/color.dart';
 import 'package:snapwall/configs/components/components_exports.dart';
+import 'package:snapwall/configs/routes/routes_name.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
+import 'package:snapwall/core/utils/helper_get_controllers/favourites_controller.dart';
+import 'package:snapwall/main.dart';
 import 'package:snapwall/modules/home/h_controller/home_controller.dart';
-import 'package:snapwall/modules/home/models/trend_photos_model.dart';
 
 import 'parts/trend_wallpapers.dart';
 
@@ -20,12 +22,17 @@ class Home extends StatelessWidget {
       HomeController(),
     );
 
+    final FavouritesController favController = Get.put(
+      FavouritesController(),
+    );
+
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
+      // appBar: AppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SpacerWidget(
+          const ScreenProportionBox(
             height: .06,
           ),
           //header section
@@ -33,71 +40,87 @@ class Home extends StatelessWidget {
             children: [
               HeadingTextWidget(title: 'SnapWall'),
               const Spacer(),
-              ImageOrIconButtonWidget(
-                image: 'assets/icons/search.png',
+              // SearchWidget(
+              //   searchEditingController: homeController.searchEditingController,
+              // ),
+              10.w,
+              CustomImageButton(
+                imageUrl: 'assets/icons/search.png',
                 isIcon: false,
                 onTap: () {
-                  print('search pressed!');
+                  final controller = Get.find<NavBarController>();
+                  controller.jumpTo(2);
+                  debugPrint('search pressed!');
                 },
               ),
               10.w,
-              ImageOrIconButtonWidget(
-                icon: Icons.category,
+              CustomImageButton(
+                iconData: Icons.category,
                 isIcon: true,
                 onTap: () {
-                  print('categ pressed!');
+                  final controller = Get.find<NavBarController>();
+                  controller
+                      .jumpTo(1); // Assuming the category tab is at index 1
+                  debugPrint('categ pressed!');
                 },
               ),
             ],
           ).paddingOnly(
             right: context.mqw * .01,
           ),
-          SpacerWidget(
+
+          const ScreenProportionBox(
             height: .06,
           ),
           // favourite section
-          HeadingTextWidget(title: 'Favourites'),
           Obx(() {
-            if (homeController.likedPhotos.value.isEmpty) {
-              return const Center(child: Text('Photos is not liked yet!'));
+            if (favController.likedPhotos.value.isNotEmpty) {
+              return HeadingTextWidget(title: 'Favourites');
+            } else {
+              return const SizedBox.shrink();
             }
-            return Container(
-              color: AppColors.grey.withOpacity(.1),
-              height: 100,
-              child: Obx(() {
-                final likedPhotos = homeController.likedPhotos.value;
-                if (likedPhotos.isEmpty) {
-                  return const Center(
-                    child: Text('No liked photos yet!'),
-                  );
-                }
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: likedPhotos.length,
-                  itemBuilder: (context, index) {
-                    final likedPhoto = likedPhotos[index];
-                    return Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: context.mqw * .01),
-                      child: SizedBox(
-                        width: 100,
-                        child: NetworkImageWidget(
-                          boxFit: BoxFit.contain,
-                          imageUrl: likedPhoto,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }),
-            );
           }),
 
-          SpacerWidget(
-            height: .1,
-          ),
+          Obx(() {
+            if (favController.likedPhotos.value.isEmpty) {
+              return const Center(
+                child: SizedBox.shrink(),
+              );
+            } else {
+              return SizedBox(
+                height: 100,
+                child: Obx(() {
+                  final likedPhotos = favController.likedPhotos.value;
+                  if (likedPhotos.isEmpty) {
+                    return const Center(
+                      child: Text('No liked photos yet!'),
+                    );
+                  }
+                  return Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: likedPhotos.length,
+                      itemBuilder: (context, index) {
+                        final likedPhoto = likedPhotos[index];
+                        return SizedBox(
+                          width: context.mqw * .3,
+                          child: NetworkImageWidget(
+                            boxFit: BoxFit.contain,
+                            borderRadius: 0,
+                            imageUrl: likedPhoto,
+                          ),
+                        ).paddingOnly(left: context.mqw * .009);
+                      },
+                    ),
+                  );
+                }),
+              );
+            }
+          }),
+
           HeadingTextWidget(title: 'Trending'),
           // wallpaper section
+
           Expanded(
             child: TrendWallpapers(
               homeController: homeController,
@@ -112,34 +135,37 @@ class Home extends StatelessWidget {
   }
 }
 
-class ImageOrIconButtonWidget extends StatelessWidget {
-  const ImageOrIconButtonWidget({
+class CustomImageButton extends StatelessWidget {
+  const CustomImageButton({
     super.key,
-    this.icon,
-    this.image,
+    this.iconData,
+    this.imageUrl,
     required this.isIcon,
     required this.onTap,
+    this.size,
   });
 
-  final IconData? icon;
-  final String? image;
+  final IconData? iconData;
+  final String? imageUrl;
   final bool isIcon;
   final VoidCallback onTap;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
-    final size = max(context.mqw * 0.03, context.mqh * 0.03);
+    final iconSize = max(context.mqw * 0.003, context.mqh * 0.003);
+    final imageSize = context.mqh * 0.01;
     return GestureDetector(
       onTap: onTap,
       child: isIcon
           ? Icon(
-              icon,
-              size: size,
+              iconData,
+              size: size ?? iconSize,
               color: AppColors.black,
             )
           : Image.asset(
-              image ?? 'assets/icons/search.png',
-              height: context.mqh * 0.026,
+              imageUrl ?? 'assets/icons/search.png',
+              height: size ?? imageSize,
               color: AppColors.black,
             ),
     );

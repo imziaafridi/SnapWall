@@ -6,5 +6,5 @@ abstract class PixelsApiRepository {
   ///
   /// Returns a [MovieListModel] representing the list of movies.
   Future<Photos> fetchPhotosList();
-  Future<Photos> fetchSearchPhotos(dynamic data);
+  // Future<Photos> fetchSearchPhotos(dynamic data);
 }

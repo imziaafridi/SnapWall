@@ -1,4 +1,4 @@
-import 'package:snapwall/modules/home/data/response/status.dart';
+import 'package:snapwall/data/response/status.dart';
 
 class ApiResponse<T> {
   Status? status;

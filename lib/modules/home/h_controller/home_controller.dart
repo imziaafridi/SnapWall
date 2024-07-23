@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snapwall/modules/home/data/response/response.dart';
-import 'package:snapwall/modules/home/repository/movies_api/pixels_repository.dart';
-
-import '../models/trend_photos_model.dart';
+import 'package:snapwall/data/response/api_response.dart';
+import 'package:snapwall/modules/home/models/trend_photos_model.dart';
+import 'package:snapwall/modules/home/repository/pixels_api_repo/pixels_api_repository_imp.dart';
 
 class HomeController extends GetxController {
   final PixelsApiRepositoryImp _pixelsApiRepositoryImp =
@@ -32,42 +31,7 @@ class HomeController extends GetxController {
     });
   }
 
-  Rx<List<String>> likedPhotos = Rx<List<String>>([]);
-  Rx<bool> isLiked = Rx<bool>(false);
-
-  void toggleFavourite(String photoSrc) {
-    if (likedPhotos.value.contains(photoSrc)) {
-      likedPhotos.value.remove(photoSrc);
-    } else {
-      likedPhotos.value.add(photoSrc);
-    }
-    // Notify listeners about the change
-    likedPhotos.refresh();
-    debugPrint('liked list: ${likedPhotos.value}');
-  }
-
-  bool isFavourite(String photoSrc) {
-    return likedPhotos.value.contains(photoSrc);
-  }
-
-  // // categories  logic
-  // Future fetchSearchingPhotos(List<String> data) async {
-  //   _setTrendingPhotos(ApiResponse.loading());
-  //   _pixelsApiRepositoryImp.fetchSearchPhotos(data).then((data) {
-  //     // Process the fetched data to remove duplicates
-  //     List<PhotosModel> uniquePhotos = data.photos.toSet().toList();
-  //     Photos uniquePhotosData = data.copyWith(photos: uniquePhotos);
-
-  //     _setTrendingPhotos(ApiResponse.completed(uniquePhotosData));
-  //     GetUtils.snakeCase('data fetch successfully: $uniquePhotosData');
-  //     debugPrint('data fetch successfully: $uniquePhotosData');
-  //   }).onError((error, stackTrace) {
-  //     _setTrendingPhotos(ApiResponse.error(error.toString()));
-  //     GetUtils.snakeCase('data fetch failed: $error');
-  //     debugPrint('data fetch failed: $error');
-  //   });
-  // }
-
+  final TextEditingController searchEditingController = TextEditingController();
   @override
   void onInit() {
     fetchTrendingPhotos(); // Fetch data when the controller is initialized
