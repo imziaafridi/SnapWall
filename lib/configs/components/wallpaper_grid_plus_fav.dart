@@ -17,7 +17,7 @@ class WallpaperGridPlusFav extends StatelessWidget {
     required this.itemCount,
     required this.favouritesController,
   });
-  final FavouritesController favouritesController;
+  final FavouritesXController favouritesController;
 
   final int itemCount;
   final List photosList;

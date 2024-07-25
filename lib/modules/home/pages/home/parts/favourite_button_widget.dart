@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:snapwall/configs/color/color.dart';
 import 'package:snapwall/configs/components/glass_morphism.dart';

@@ -1,173 +1,83 @@
-import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/configs/color/color.dart';
 import 'package:snapwall/configs/components/components_exports.dart';
-import 'package:snapwall/configs/routes/routes_name.dart';
+import 'package:snapwall/configs/components/loading_widget.dart';
+import 'package:snapwall/configs/components/logo_text_widget.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
 import 'package:snapwall/core/utils/helper_get_controllers/favourites_controller.dart';
-import 'package:snapwall/main.dart';
+import 'package:snapwall/data/response/response.dart';
 import 'package:snapwall/modules/home/h_controller/home_controller.dart';
+import 'package:snapwall/modules/home/pages/home/parts/trend_photos_grid.dart';
+import 'parts/snapwall_home_header_view.dart';
 
-import 'parts/trend_wallpapers.dart';
-
-class Home extends StatelessWidget {
-  const Home({super.key});
+class SnapWallHomeView extends StatelessWidget {
+  const SnapWallHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.put(
-      HomeController(),
+    final TrendXController trendXController = Get.put(
+      TrendXController(),
     );
-
-    final FavouritesController favController = Get.put(
-      FavouritesController(),
+    final FavouritesXController favouritesXController = Get.put(
+      FavouritesXController(),
     );
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      // appBar: AppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ScreenProportionBox(
-            height: .06,
+            height: .1,
           ),
-          //header section
-          Row(
-            children: [
-              HeadingTextWidget(title: 'SnapWall'),
-              const Spacer(),
-              // SearchWidget(
-              //   searchEditingController: homeController.searchEditingController,
-              // ),
-              10.w,
-              CustomImageButton(
-                imageUrl: 'assets/icons/search.png',
-                isIcon: false,
-                onTap: () {
-                  final controller = Get.find<NavBarController>();
-                  controller.jumpTo(2);
-                  debugPrint('search pressed!');
-                },
-              ),
-              10.w,
-              CustomImageButton(
-                iconData: Icons.category,
-                isIcon: true,
-                onTap: () {
-                  final controller = Get.find<NavBarController>();
-                  controller
-                      .jumpTo(1); // Assuming the category tab is at index 1
-                  debugPrint('categ pressed!');
-                },
-              ),
-            ],
-          ).paddingOnly(
+
+          // header section
+          const SnapWallHomeHeaderView().paddingOnly(
             right: context.mqw * .01,
           ),
 
           const ScreenProportionBox(
-            height: .06,
+            height: .08,
           ),
-          // favourite section
-          Obx(() {
-            if (favController.likedPhotos.value.isNotEmpty) {
-              return HeadingTextWidget(title: 'Favourites');
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
 
-          Obx(() {
-            if (favController.likedPhotos.value.isEmpty) {
-              return const Center(
-                child: SizedBox.shrink(),
-              );
-            } else {
-              return SizedBox(
-                height: 100,
-                child: Obx(() {
-                  final likedPhotos = favController.likedPhotos.value;
-                  if (likedPhotos.isEmpty) {
-                    return const Center(
-                      child: Text('No liked photos yet!'),
-                    );
-                  }
-                  return Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: likedPhotos.length,
-                      itemBuilder: (context, index) {
-                        final likedPhoto = likedPhotos[index];
-                        return SizedBox(
-                          width: context.mqw * .3,
-                          child: NetworkImageWidget(
-                            boxFit: BoxFit.contain,
-                            borderRadius: 0,
-                            imageUrl: likedPhoto,
-                          ),
-                        ).paddingOnly(left: context.mqw * .009);
-                      },
-                    ),
-                  );
-                }),
-              );
-            }
-          }),
+          // wallpaper section title
+          const LogoTextWidget(
+            title1: 'Trending',
+            title2: '\tWallpapers',
+            title1Color: AppColors.black,
+            title2Color: AppColors.grey,
+            title1FontWeight: FontWeight.bold,
+            title2FontWeight: FontWeight.normal,
+            textDecoration: TextDecoration.none,
+          ),
 
-          HeadingTextWidget(title: 'Trending'),
-          // wallpaper section
-
+          // wallpaper view
           Expanded(
-            child: TrendWallpapers(
-              homeController: homeController,
-            ),
+            child: Obx(() {
+              if (trendXController.trendPhotos.value.status == Status.loading) {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              } else if (trendXController.trendPhotos.value.status ==
+                  Status.error) {
+                return Center(
+                  child: Text(
+                    trendXController.trendPhotos.value.message!,
+                  ),
+                );
+              }
+              return TrendPhotosGrid(
+                data: trendXController.trendPhotos.value.data?.photos ?? [],
+                trendXController: trendXController,
+                favouritesXController: favouritesXController,
+              );
+            }),
           ),
         ],
-      ).paddingOnly(
-        left: context.mqw * .008,
-        right: context.mqw * .008,
+      ).paddingSymmetric(
+        horizontal: context.mqw * .025,
       ),
-    );
-  }
-}
-
-class CustomImageButton extends StatelessWidget {
-  const CustomImageButton({
-    super.key,
-    this.iconData,
-    this.imageUrl,
-    required this.isIcon,
-    required this.onTap,
-    this.size,
-  });
-
-  final IconData? iconData;
-  final String? imageUrl;
-  final bool isIcon;
-  final VoidCallback onTap;
-  final double? size;
-
-  @override
-  Widget build(BuildContext context) {
-    final iconSize = max(context.mqw * 0.003, context.mqh * 0.003);
-    final imageSize = context.mqh * 0.01;
-    return GestureDetector(
-      onTap: onTap,
-      child: isIcon
-          ? Icon(
-              iconData,
-              size: size ?? iconSize,
-              color: AppColors.black,
-            )
-          : Image.asset(
-              imageUrl ?? 'assets/icons/search.png',
-              height: size ?? imageSize,
-              color: AppColors.black,
-            ),
     );
   }
 }

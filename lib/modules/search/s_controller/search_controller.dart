@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/data/response/api_response.dart';
@@ -10,13 +12,16 @@ class SearchXContoller extends GetxController {
 
   Rx<ApiResponse<PhotosSearchModel>> searchedPhotos =
       ApiResponse<PhotosSearchModel>.loading().obs;
+  final RxString searchText = ''.obs; // Observable to track search text
+
+  Rx<bool> isSearchedTaped = false.obs;
 
   void _setSearchedPhotos(ApiResponse<PhotosSearchModel> updatedCategPhotos) {
     searchedPhotos.value = updatedCategPhotos;
   }
 
   // categories logic
-  Future fetchCategPhotos(String category) async {
+  Future fetchSearchedPhotos(String category) async {
     _setSearchedPhotos(ApiResponse.loading());
     _pixelsApiRepositoryImp.fetchSearchPhotos(category).then((data) {
       // Process the fetched data to remove duplicates
@@ -27,25 +32,31 @@ class SearchXContoller extends GetxController {
       _setSearchedPhotos(
         ApiResponse.completed(data),
       );
-      GetUtils.snakeCase('data fetch successfully: $uniquePhotosData');
-      debugPrint('data fetch successfully: $uniquePhotosData');
+      GetUtils.snakeCase('search data fetch successfully: $uniquePhotosData');
+      debugPrint('search data fetch successfully: $uniquePhotosData');
     }).onError((error, stackTrace) {
       _setSearchedPhotos(ApiResponse.error(error.toString()));
-      GetUtils.snakeCase('data fetch failed: $error');
-      debugPrint('data fetch failed: $error');
+      GetUtils.snakeCase('search data fetch failed: $error');
+      debugPrint('search data fetch failed: $error');
     });
   }
 
-  final TextEditingController searchController = TextEditingController();
+// debounce for onchaged textFieled for auto searching wallpapers with optimised version of code thats why we used debouncer for that to not call when not needed
+  Timer? _debounceTimer;
 
-  @override
-  void onClose() {
-    searchController.dispose(); // Dispose of the controller here
-    super.onClose();
+  void onSearchTextChanged(String text) {
+    // if (_debounceTimer != null) {
+    //   _debounceTimer?.cancel();
+    // }
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
+      searchText.value = text;
+      fetchSearchedPhotos(text);
+      isSearchedTaped.value = true;
+    });
   }
 }
-
-// var categList = [
+// var categList = [s
 //   'Nature',
 //   'People',
 //   'Business & Work',

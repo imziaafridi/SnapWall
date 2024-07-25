@@ -4,7 +4,7 @@ import 'package:snapwall/data/response/api_response.dart';
 import 'package:snapwall/modules/home/models/trend_photos_model.dart';
 import 'package:snapwall/modules/home/repository/pixels_api_repo/pixels_api_repository_imp.dart';
 
-class HomeController extends GetxController {
+class TrendXController extends GetxController {
   final PixelsApiRepositoryImp _pixelsApiRepositoryImp =
       PixelsApiRepositoryImp();
 

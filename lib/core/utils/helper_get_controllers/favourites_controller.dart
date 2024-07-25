@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FavouritesController extends GetxController {
-  Rx<List<String>> likedPhotos = Rx<List<String>>([]);
-  // Rx<bool> isLiked = Rx<bool>(false);
+class FavouritesXController extends GetxController {
+  Rx<List<String>> likedPhotos = Rx<List<String>>(
+    [],
+  );
 
   void toggleFavourite(String photoSrc) {
     if (likedPhotos.value.contains(photoSrc)) {
@@ -13,7 +14,9 @@ class FavouritesController extends GetxController {
     }
     // Notify listeners about the change
     likedPhotos.refresh();
-    debugPrint('liked list: ${likedPhotos.value}');
+    debugPrint(
+      'liked list: ${likedPhotos.value}',
+    );
   }
 
   bool isFavourite(String photoSrc) {

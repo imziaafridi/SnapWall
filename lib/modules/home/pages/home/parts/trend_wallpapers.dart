@@ -22,11 +22,11 @@ class TrendWallpapers extends StatelessWidget {
     required this.homeController,
   });
 
-  final HomeController homeController;
+  final TrendXController homeController;
 
   @override
   Widget build(BuildContext context) {
-    FavouritesController favouritesController = FavouritesController();
+    FavouritesXController favouritesController = FavouritesXController();
     return Obx(() {
       if (homeController.trendPhotos.value.status == Status.loading) {
         return const Center(

@@ -3,21 +3,36 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:snapwall/configs/color/color.dart';
 
 class HeadingTextWidget extends StatelessWidget {
-  HeadingTextWidget({
-    super.key,
-    required this.title,
-  });
+  const HeadingTextWidget(
+      {super.key,
+      required this.title,
+      this.color,
+      this.fontSize,
+      this.fontWeight,
+      this.textDecoration,
+      this.textDecorationColor,
+      this.textDecorationStyle});
 
-  String title;
+  final String title;
+  final double? fontSize;
+  final Color? color;
+  final FontWeight? fontWeight;
+  final TextDecoration? textDecoration;
+  final Color? textDecorationColor;
+  final TextDecorationStyle? textDecorationStyle;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
+      textAlign: TextAlign.center,
       style: GoogleFonts.raleway(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-        color: AppColors.black,
+        fontSize: fontSize ?? 22,
+        fontWeight: fontWeight ?? FontWeight.w600,
+        color: color ?? AppColors.black,
+        decoration: textDecoration ?? TextDecoration.none,
+        decorationColor: textDecorationColor ?? AppColors.black,
+        decorationStyle: textDecorationStyle ?? TextDecorationStyle.solid,
       ),
     );
   }
