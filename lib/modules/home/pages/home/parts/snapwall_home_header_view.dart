@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:snapwall/configs/color/color.dart';
 import 'package:snapwall/configs/components/custom_image_or_icon_button.dart';
 import 'package:snapwall/configs/components/logo_text_widget.dart';
 import 'package:snapwall/configs/routes/navBar/nav_bar_controller.dart';
@@ -17,6 +18,10 @@ class SnapWallHomeHeaderView extends StatelessWidget {
         const LogoTextWidget(
           title1: 'Snap',
           title2: 'Wall',
+          title1Color: AppColors.grey,
+          title2Color: AppColors.red,
+          title2FontWeight: FontWeight.w500,
+          textDecoration: TextDecoration.underline,
         ),
         const Spacer(),
         10.w,
