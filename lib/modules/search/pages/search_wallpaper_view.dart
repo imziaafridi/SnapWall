@@ -77,20 +77,9 @@ class SearchWallpapersView extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return Row(
-                    children: [
-                      const HeadingTextWidget(
-                        title: 'Showing wallpapers for',
-                        color: AppColors.grey,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 20,
-                      ),
-                      HeadingTextWidget(
-                        title: '\t${searchXController.searchText.value}',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ],
+                  return Title2TextWidget(
+                    titlePart1: 'Showing wallpapers for',
+                    titlePart2: searchXController.searchText.value,
                   );
                 }
               }),
@@ -127,6 +116,41 @@ class SearchWallpapersView extends StatelessWidget {
           ).paddingSymmetric(horizontal: context.mqw * .035),
         ),
       ),
+    );
+  }
+}
+
+class Title2TextWidget extends StatelessWidget {
+  const Title2TextWidget({
+    super.key,
+    this.titlePart1,
+    required this.titlePart2,
+    // required this.searchXController,
+  });
+
+  // final SearchXContoller searchXController;
+  final String? titlePart1;
+  final String titlePart2;
+
+// searchXController.searchText.value for titlePart2 -> search view
+// Showing wallpapers for titlePart1 -> search view
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        HeadingTextWidget(
+          title: titlePart1 ?? 'Showing wallpapers for',
+          color: AppColors.grey,
+          fontWeight: FontWeight.normal,
+          fontSize: 20,
+        ),
+        HeadingTextWidget(
+          title: '\t$titlePart2',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ],
     );
   }
 }

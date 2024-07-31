@@ -51,8 +51,6 @@ dependencies:
   another_flushbar: ^1.12.30
   cached_network_image: ^3.3.1
   shimmer: ^3.0.0
-  hugeicons: ^0.0.5
-  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:

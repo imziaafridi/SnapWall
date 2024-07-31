@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:snapwall/configs/color/color.dart';
+import 'package:snapwall/configs/components/components_exports.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
 import 'package:snapwall/core/utils/helper_get_controllers/favourites_controller.dart';
 import 'package:snapwall/modules/home/h_controller/home_controller.dart';
@@ -38,34 +40,66 @@ class TrendPhotosGrid extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           String photo = data[index].src.portrait;
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(
-              20,
+          return GestureDetector(
+            onTap: () => Get.to(
+              SnapWallHomeDetailView(
+                photosModel: data[index],
+              ),
             ),
-            child: Stack(
-              children: [
-                NetworkCacheImage(
-                  imageUrl: photo,
-                ),
-                Positioned(
-                    top: 0.0,
-                    right: 0.0,
-                    child: Obx(() {
-                      return FavouriteButtonWidget(
-                        onTap: () {
-                          favouritesXController.toggleFavourite(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
+              child: Stack(
+                children: [
+                  NetworkCacheImage(
+                    imageUrl: photo,
+                  ),
+                  Positioned(
+                      top: 0.0,
+                      right: 0.0,
+                      child: Obx(() {
+                        return FavouriteButtonWidget(
+                          onTap: () {
+                            favouritesXController.toggleFavourite(
+                              photo,
+                            );
+                          },
+                          isLiked: favouritesXController.isFavourite(
                             photo,
-                          );
-                        },
-                        isLiked: favouritesXController.isFavourite(
-                          photo,
-                        ),
-                      );
-                    })),
-              ],
+                          ),
+                        );
+                      })),
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class SnapWallHomeDetailView extends StatelessWidget {
+  const SnapWallHomeDetailView({
+    super.key,
+    required this.photosModel,
+  });
+  final PhotosModel photosModel;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.whiteColor,
+      appBar: AppBar(),
+      body: const Column(
+        children: [
+          Center(
+            child: HeadingTextWidget(title: 'SnapWall Home Detail View'),
+          ),
+        ],
+      ).paddingSymmetric(
+        horizontal: context.mqw * .04,
+        vertical: context.mqh * .04,
       ),
     );
   }

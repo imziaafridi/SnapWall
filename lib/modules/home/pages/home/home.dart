@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/configs/color/color.dart';
@@ -29,11 +30,24 @@ class SnapWallHomeView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ScreenProportionBox(
-            height: .1,
+            height: .04,
           ),
 
           // header section
-          const SnapWallHomeHeaderView().paddingOnly(
+          const SnapWallHeaderView(
+            title1: 'Snap',
+            title2: 'Wall',
+            title1Color: AppColors.grey,
+            title2Color: AppColors.red,
+            title2FontWeight: FontWeight.w500,
+            textDecoration: TextDecoration.underline,
+            navTabIndexIconImgBtn1: 2,
+            navTabIndexIconImgBtn2: 1,
+            isIcon1: false,
+            isIcon2: true,
+            image1: 'assets/icons/search.png',
+            icon2: CupertinoIcons.square_grid_2x2,
+          ).paddingOnly(
             right: context.mqw * .01,
           ),
 
@@ -76,7 +90,8 @@ class SnapWallHomeView extends StatelessWidget {
           ),
         ],
       ).paddingSymmetric(
-        horizontal: context.mqw * .025,
+        horizontal: context.mqw * .04,
+        vertical: context.mqh * .04,
       ),
     );
   }

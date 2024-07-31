@@ -24,6 +24,8 @@ class HeadingTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
+      softWrap: true,
+      overflow: TextOverflow.fade,
       title,
       textAlign: TextAlign.center,
       style: GoogleFonts.raleway(
