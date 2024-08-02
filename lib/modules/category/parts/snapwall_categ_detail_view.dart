@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/configs/color/color.dart';
+import 'package:snapwall/configs/components/back_widget.dart';
 import 'package:snapwall/configs/components/components_exports.dart';
 import 'package:snapwall/configs/components/loading_widget.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
@@ -35,14 +35,7 @@ class SnapWallCategDetailView extends StatelessWidget {
             height: .02,
           ),
           // custom back btn
-          GestureDetector(
-            onTap: () => Get.back(),
-            child: const Icon(
-              CupertinoIcons.back,
-              size: 30,
-              color: AppColors.grey,
-            ),
-          ),
+          const BackWidget(),
 
           const ScreenProportionBox(
             height: .04,

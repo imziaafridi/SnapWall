@@ -19,14 +19,16 @@ class SnapWallHeaderView extends StatelessWidget {
     this.textDecoration,
     this.sizeIconImg,
     this.title1FontWeight,
-    required this.navTabIndexIconImgBtn1,
-    required this.navTabIndexIconImgBtn2,
     required this.isIcon1,
     required this.isIcon2,
     this.image1,
     this.icon2,
     this.image2,
     this.icon1,
+    this.onTap1,
+    this.onTap2,
+    this.navTabIndexIconImgBtn1,
+    this.navTabIndexIconImgBtn2,
   });
 
   final String title1;
@@ -40,14 +42,16 @@ class SnapWallHeaderView extends StatelessWidget {
   // final void Function() onTap1IconImg;
   // final void Function() onTap2IconImg;
   final double? sizeIconImg;
-  final int navTabIndexIconImgBtn1;
-  final int navTabIndexIconImgBtn2;
+  final int? navTabIndexIconImgBtn1;
+  final int? navTabIndexIconImgBtn2;
   final bool isIcon1;
   final bool isIcon2;
   final String? image1;
   final String? image2;
   final IconData? icon1;
   final IconData? icon2;
+  final void Function()? onTap1;
+  final void Function()? onTap2;
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +73,13 @@ class SnapWallHeaderView extends StatelessWidget {
           iconData: icon1,
           isIcon: isIcon1,
           size: sizeIconImg ?? 25,
-          onTap: () {
-            final controller = Get.find<NavBarXController>();
-            controller.jumpTo(
-              navTabIndexIconImgBtn1,
-            ); // jumping to search tab
-          },
+          onTap: onTap1 ??
+              () {
+                final controller = Get.find<NavBarXController>();
+                controller.jumpTo(
+                  navTabIndexIconImgBtn1 ?? 0,
+                ); // jumping to search tab
+              },
         ),
         10.w,
         CustomImageOrIconButton(
@@ -83,12 +88,13 @@ class SnapWallHeaderView extends StatelessWidget {
           iconData: icon2,
           isIcon: isIcon2,
           size: sizeIconImg ?? 25,
-          onTap: () {
-            final controller = Get.find<NavBarXController>();
-            controller.jumpTo(
-              navTabIndexIconImgBtn2,
-            ); // jumping to categ tab
-          },
+          onTap: onTap2 ??
+              () {
+                final controller = Get.find<NavBarXController>();
+                controller.jumpTo(
+                  navTabIndexIconImgBtn2 ?? 1,
+                ); // jumping to categ tab
+              },
         ),
       ],
     );
