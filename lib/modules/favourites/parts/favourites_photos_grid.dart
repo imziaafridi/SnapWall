@@ -36,7 +36,7 @@ class FavouritesPhotosGrid extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              NetworkCacheImage(
+              NetworkCacheImageWithTransitionEffect(
                 imageUrl: photo,
               ),
               Positioned(

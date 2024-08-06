@@ -8,14 +8,16 @@ class BackWidget extends StatelessWidget {
     this.icon,
     this.color,
     this.size,
+    this.onTap,
   });
   final IconData? icon;
   final Color? color;
   final double? size;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.back(),
+      onTap: onTap ?? () => Get.back(),
       child: Icon(
         icon ?? CupertinoIcons.back,
         size: size ?? 30,

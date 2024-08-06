@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/configs/color/color.dart';
 import 'package:snapwall/configs/components/back_widget.dart';
 import 'package:snapwall/configs/components/components_exports.dart';
+import 'package:snapwall/configs/components/fade_transition_widget.dart';
 import 'package:snapwall/configs/components/loading_widget.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
 import 'package:snapwall/data/response/status.dart';
+import 'package:snapwall/modules/category/parts/categ_searched_photos_grid.dart';
 import 'package:snapwall/modules/category/xController/categ_controller.dart';
-import 'package:snapwall/modules/home/pages/home/parts/network_cache_image.dart';
-import 'package:snapwall/modules/search/models/search_photos_model.dart';
+
 import 'package:snapwall/modules/search/pages/search_wallpaper_view.dart';
 
 class SnapWallCategDetailView extends StatelessWidget {
   const SnapWallCategDetailView({
     super.key,
     required this.categXController,
-    this.keywordCateg,
   });
   final CategXController categXController;
-  final String? keywordCateg;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: AppColors.whiteColor,
-      // ),
       backgroundColor: AppColors.whiteColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -35,41 +31,60 @@ class SnapWallCategDetailView extends StatelessWidget {
             height: .02,
           ),
           // custom back btn
-          const BackWidget(),
+
+          Obx(() {
+            return BackWidget(
+              onTap: categXController.loadMoreCateg.value
+                  ? null
+                  : () async {
+                      // pagination is fully reset before navigating back.
+                      await categXController.clearCategSearchPhotos();
+                      // Back
+                      Get.back();
+                    },
+            );
+          }),
 
           const ScreenProportionBox(
-            height: .04,
+            height: .03,
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Title2TextWidget(
-              titlePart2: keywordCateg ?? ' ',
+
+          FadeTransitionWidget(
+            delay: const Duration(milliseconds: 3000),
+            // duration: const Duration(milliseconds: 3000),,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Obx(() {
+                return Title2TextWidget(
+                  titlePart2: categXController.categLabel.value,
+                );
+              }),
             ),
           ),
           const ScreenProportionBox(
-            height: .02,
+            height: .01,
           ),
           categXController.isBlank == false
               ? Expanded(
                   child: Obx(
                     () {
-                      if (categXController.categTappedPhotos.value.status ==
-                          Status.loading) {
-                        return const Center(
-                          child: LoadingWidget(),
-                        );
-                      } else if (categXController
-                              .categTappedPhotos.value.status ==
-                          Status.error) {
-                        return Center(
+                      final state =
+                          categXController.categSearchPhotosList.value.status;
+                      switch (state) {
+                        case Status.loading:
+                          return const Center(child: LoadingWidget());
+                        case Status.error:
+                          return Center(
                             child: Text(
-                                'Error: ${categXController.categTappedPhotos.value.message}'));
-                      } else {
-                        return CategTappedPhotosGrid(
-                          searchXController: categXController,
-                          data: categXController
-                              .categTappedPhotos.value.data!.photos,
-                        );
+                                'Error: ${categXController.categSearchPhotosList.value.message}'),
+                          );
+                        default:
+                          return CategSearchedPhotosGrid(
+                            data: categXController
+                                    .categSearchPhotosList.value.data ??
+                                [],
+                            categXController: categXController,
+                          );
                       }
                     },
                   ),
@@ -79,44 +94,11 @@ class SnapWallCategDetailView extends StatelessWidget {
                       title: 'Error While Fatching Category Data'),
                 ),
         ],
-      ).paddingSymmetric(
-        horizontal: context.mqw * .04,
-        vertical: context.mqh * .04,
-      ),
-    );
-  }
-}
-
-class CategTappedPhotosGrid extends StatelessWidget {
-  final List<PhotosDetailsSearchModel> data;
-  final CategXController searchXController;
-
-  const CategTappedPhotosGrid(
-      {super.key, required this.data, required this.searchXController});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: MasonryGridView.builder(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemCount: data.length,
-        mainAxisSpacing: context.mqw * .01,
-        crossAxisSpacing: context.mqh * .01,
-        gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemBuilder: (context, index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(
-              20,
-            ),
-            child: NetworkCacheImage(
-              imageUrl: data[index].src.portrait,
-            ),
-          );
-        },
+      ).paddingOnly(
+        left: context.mqw * .04,
+        right: context.mqw * .04,
+        top: context.mqh * .04,
+        bottom: context.mqh * .004,
       ),
     );
   }

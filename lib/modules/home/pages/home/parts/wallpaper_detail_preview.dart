@@ -7,14 +7,17 @@ import 'package:snapwall/configs/components/glass_morphism.dart';
 import 'package:snapwall/configs/components/heading_text_widget.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
 import 'package:snapwall/modules/home/models/trend_photos_model.dart';
+import 'package:snapwall/modules/search/models/search_photos_model.dart';
 
 class SnapWallWallpaperDetailPreview extends StatelessWidget {
   const SnapWallWallpaperDetailPreview({
     super.key,
     required this.photosModel,
+    this.photosDetailsSearchModel,
   });
 
-  final PhotosModel photosModel;
+  final PhotosModel? photosModel;
+  final PhotosDetailsSearchModel? photosDetailsSearchModel;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,11 @@ class SnapWallWallpaperDetailPreview extends StatelessWidget {
 
   Widget _buildPhotoView() {
     return PhotoView(
-      imageProvider: CachedNetworkImageProvider(photosModel.src.portrait),
+      imageProvider: CachedNetworkImageProvider(
+        photosModel?.src.portrait ??
+            photosDetailsSearchModel?.src.portrait ??
+            '',
+      ),
       loadingBuilder: (context, event) => _buildLoadingIndicator(event),
       backgroundDecoration: const BoxDecoration(
         color: Colors.transparent,

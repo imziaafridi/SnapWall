@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:snapwall/configs/components/fade_transition_widget.dart';
 import 'configs/routes/navBar/nav_bar.dart';
 
 void main() {
@@ -30,3 +31,35 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// class TestingWidget extends StatelessWidget {
+//   const TestingWidget({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Scaffold(
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             FadeTransitionWidget(
+//               delay: Duration(milliseconds: 1000),
+//               // duration: Duration(milliseconds: 1000),
+//               child: FlutterLogo(),
+//             ),
+//             FadeTransitionWidget(
+//               delay: Duration(milliseconds: 3000),
+//               // duration: Duration(milliseconds: 6000),
+//               child: FlutterLogo(),
+//             ),
+//             FadeTransitionWidget(
+//               delay: Duration(milliseconds: 5000),
+//               // duration: Duration(milliseconds: 9000),
+//               child: FlutterLogo(),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -19,7 +19,8 @@ class BodyTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: GoogleFonts.roboto(
+      textAlign: TextAlign.center,
+      style: GoogleFonts.alata(
         fontSize: fontSize ?? 16, // default font size
         color: color ?? Colors.black, // default color
         fontWeight: fontWeight ?? FontWeight.normal, // default font weight

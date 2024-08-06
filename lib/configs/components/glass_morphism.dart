@@ -9,17 +9,19 @@ class GlassMorphism extends StatelessWidget {
     required this.opacity,
     required this.child,
     this.bgPaint,
+    this.borderRadius,
   });
   final double blur;
   final double opacity;
   final Widget child;
   final Color? bgPaint;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(
-        20.0,
+        borderRadius ?? 20.0,
       ),
       child: BackdropFilter(
         filter: ImageFilter.blur(
@@ -35,7 +37,7 @@ class GlassMorphism extends StatelessWidget {
                 ? bgPaint!.withOpacity(opacity)
                 : Colors.white.withOpacity(opacity),
             borderRadius: BorderRadius.circular(
-              20.0,
+              borderRadius ?? 20.0,
             ),
             border: Border.all(
               color: Colors.white.withOpacity(

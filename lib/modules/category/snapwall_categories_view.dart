@@ -54,13 +54,6 @@ class SnapWallCategoriesView extends StatelessWidget {
               image1: 'assets/icons/search.png',
               icon2: CupertinoIcons.heart,
             ),
-            // const LogoTextWidget(
-            //   title1: 'Snapwall',
-            //   title2: '\tCollections',
-            //   title2Color: AppColors.red,
-            //   title1Color: AppColors.grey,
-            //   title2FontWeight: FontWeight.w500,
-            // ),
 
             const ScreenProportionBox(
               height: .02,
@@ -79,18 +72,23 @@ class SnapWallCategoriesView extends StatelessWidget {
                       debugPrint('categ image $categImage');
                       debugPrint('categ label $categLabel');
                       try {
-                        await _categXController.fetchCategPhotos(categLabel);
-                        // debugPrint(
-                        //     'keyword: ${searchXContoller.searchedPhotos.value.data?.page}');
+                        final categoryLabel =
+                            categLabel; // Create a local variable to avoid shadowing
+                        _categXController.categLabel.value = categoryLabel;
+
+                        // await _categXController.clearCategSearchPhotos();
+                        await _categXController
+                            .fetchCategSearchPhotosData(categLabel);
+
                         Get.to(
-                          SnapWallCategDetailView(
+                          () => SnapWallCategDetailView(
                             categXController: _categXController,
-                            keywordCateg: categLabel,
                           ),
                         );
                       } catch (e) {
                         debugPrint('Error: $e');
-                        // Handle the error or show an error message to the user
+                        // Show an error message to the user, e.g.:
+                        Get.snackbar('Error', 'Failed to load category data');
                       }
                     },
                     child: Stack(
@@ -98,7 +96,7 @@ class SnapWallCategoriesView extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           height: context.mqh * .2,
-                          child: NetworkCacheImage(
+                          child: NetworkCacheImageWithTransitionEffect(
                             imageUrl: categImage,
                             borderRadius: 20.0,
                           ).paddingSymmetric(
@@ -130,9 +128,10 @@ class SnapWallCategoriesView extends StatelessWidget {
               ),
             ),
           ],
-        ).paddingSymmetric(
-          horizontal: context.mqw * .04,
-          vertical: context.mqh * .04,
+        ).paddingOnly(
+          left: context.mqw * .04,
+          right: context.mqw * .04,
+          top: context.mqh * .04,
         ),
       ),
     );

@@ -39,7 +39,7 @@ class WallpaperGridPlusFav extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 20,
               ),
-              child: NetworkCacheImage(
+              child: NetworkCacheImageWithTransitionEffect(
                 imageUrl: photo.src.portrait,
               ),
             ),

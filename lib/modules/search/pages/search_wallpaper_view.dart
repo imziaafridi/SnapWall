@@ -196,7 +196,7 @@ class SearchedPhotosGrid extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               20,
             ),
-            child: NetworkCacheImage(
+            child: NetworkCacheImageWithTransitionEffect(
               imageUrl: data[index].src.portrait,
             ),
           );

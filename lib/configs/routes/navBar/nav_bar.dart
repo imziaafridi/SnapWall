@@ -27,7 +27,7 @@ class NavBar extends StatelessWidget {
         child: Obx(
           () => ClipRRect(
             borderRadius: BorderRadius.circular(
-              15,
+              18,
             ),
             child: NavigationBar(
               destinations: const [
@@ -69,7 +69,9 @@ class NavBar extends StatelessWidget {
                 ),
               ],
               selectedIndex: navBarController.currentIndex,
-              animationDuration: const Duration(milliseconds: 500),
+              animationDuration: const Duration(
+                milliseconds: 500,
+              ),
               onDestinationSelected: navBarController.jumpTo,
               labelBehavior:
                   NavigationDestinationLabelBehavior.onlyShowSelected,

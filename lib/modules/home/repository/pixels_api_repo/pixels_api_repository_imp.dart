@@ -9,9 +9,17 @@ class PixelsApiRepositoryImp implements PixelsApiRepository {
   final _apiServices = NetworkApiService();
 
   @override
-  Future<Photos> fetchPhotosList() async {
-    final response =
-        await _apiServices.getApi(PixelApiUrls.TRENDING_URL, headers);
+  Future<Photos> fetchPhotosList({
+    required int page,
+    int perPage = 15,
+  }) async {
+    final response = await _apiServices.getApi(
+        PixelApiUrls.TRENDING_URL +
+            PixelApiUrls.questionMark +
+            PixelApiUrls.page +
+            PixelApiUrls.equalTo +
+            PixelApiUrls.getPage(page),
+        headers);
     return Photos.fromJson(response);
   }
 }
