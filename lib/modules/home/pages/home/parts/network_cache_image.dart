@@ -24,8 +24,8 @@ class NetworkCacheImageWithTransitionEffect extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius ?? 20.0),
       child: FadeTransitionWidget(
-        delay: Duration(milliseconds: fadeTransDelay ?? 200),
-        duration: Duration(milliseconds: fadeTransAnimate ?? 1000),
+        delay: fadeTransDelay ?? 200,
+        duration: fadeTransAnimate ?? 1000,
         child: CachedNetworkImage(
           fit: BoxFit.cover,
           imageUrl: imageUrl,

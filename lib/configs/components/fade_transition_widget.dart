@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class FadeTransitionWidget extends StatefulWidget {
   final Widget child;
-  final Duration delay;
-  final Duration duration;
+  final int? delay;
+  final int? duration;
 
   const FadeTransitionWidget({
     super.key,
     required this.child,
-    this.delay = const Duration(milliseconds: 200),
-    this.duration = const Duration(milliseconds: 1500),
+    this.delay,
+    this.duration,
   });
 
   @override
@@ -19,7 +19,7 @@ class FadeTransitionWidget extends StatefulWidget {
 class _FadeTransitionWidgetState extends State<FadeTransitionWidget>
     with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: widget.duration,
+    duration: Duration(milliseconds: widget.duration ?? 1000),
     vsync: this,
   );
   late final Animation<double> _animation = CurvedAnimation(
@@ -30,7 +30,7 @@ class _FadeTransitionWidgetState extends State<FadeTransitionWidget>
   @override
   void initState() {
     super.initState();
-    Future.delayed(widget.delay, () {
+    Future.delayed(Duration(milliseconds: widget.delay ?? 200), () {
       _controller.forward();
     });
   }
@@ -44,7 +44,7 @@ class _FadeTransitionWidgetState extends State<FadeTransitionWidget>
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Colors.white,
+      color: Colors.transparent,
       child: FadeTransition(
         opacity: _animation,
         child: widget.child,

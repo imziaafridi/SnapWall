@@ -5,6 +5,7 @@ import 'package:snapwall/configs/components/back_widget.dart';
 import 'package:snapwall/configs/components/components_exports.dart';
 import 'package:snapwall/configs/components/fade_transition_widget.dart';
 import 'package:snapwall/configs/components/loading_widget.dart';
+import 'package:snapwall/configs/components/title2_text_widget.dart';
 import 'package:snapwall/core/utils/extensions/general_ectensions.dart';
 import 'package:snapwall/data/response/status.dart';
 import 'package:snapwall/modules/category/parts/categ_searched_photos_grid.dart';
@@ -50,7 +51,7 @@ class SnapWallCategDetailView extends StatelessWidget {
           ),
 
           FadeTransitionWidget(
-            delay: const Duration(milliseconds: 3000),
+            delay: 3000,
             // duration: const Duration(milliseconds: 3000),,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,

@@ -21,8 +21,15 @@ class SearchXContoller extends GetxController {
     searchedPhotos.value = updatedSearchedPhotos;
   }
 
+  // pagination dec..
+  int _page = 1;
+  final Rx<bool> _isLoadingMore = false.obs;
+  final ScrollController _scrollController = ScrollController();
+
   // categories logic
   Future fetchSearchedPhotos(String search) async {
+    if (_isLoadingMore.value) return;
+    _isLoadingMore.value = true;
     _setSearchedPhotos(ApiResponse.loading());
     _pixelsApiRepositoryImp.fetchSearchPhotos(search).then((data) {
       // Process the fetched data to remove duplicates
@@ -33,10 +40,15 @@ class SearchXContoller extends GetxController {
       _setSearchedPhotos(
         ApiResponse.completed(data),
       );
+
+      _page++;
+      _isLoadingMore.value = false;
+
       GetUtils.snakeCase('search data fetch successfully: $uniquePhotosData');
       debugPrint('search data fetch successfully: $uniquePhotosData');
     }).onError((error, stackTrace) {
       _setSearchedPhotos(ApiResponse.error(error.toString()));
+      _isLoadingMore.value = false;
       GetUtils.snakeCase('search data fetch failed: $error');
       debugPrint('search data fetch failed: $error');
     });
@@ -56,4 +68,39 @@ class SearchXContoller extends GetxController {
       isSearchedTaped.value = true;
     });
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  // scroll
+  final _scrollNotifier = ValueNotifier(0.0);
+  final isScrollingToTop = RxBool(false);
+
+  void _scrollListener() {
+    if (_isLoadingMore.value) return;
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        fetchSearchedPhotos(searchText.value);
+      });
+    }
+  }
+
+  @override
+  void onInit() {
+    _scrollController.addListener(() {
+      _scrollListener();
+      _scrollNotifier.value = _scrollController.offset;
+    });
+    fetchSearchedPhotos(searchText.value);
+    super.onInit();
+  }
+
+  // getters
+  ValueNotifier<double> get scrollNotifier => _scrollNotifier;
+  Rx<bool> get loadMore => _isLoadingMore;
+  ScrollController get scrollController => _scrollController;
 }

@@ -10,17 +10,21 @@ class TrendXController extends GetxController {
 
   Rx<ApiResponse<List<PhotosModel>>> trendPhotos =
       ApiResponse<List<PhotosModel>>.loading().obs;
+  final TextEditingController searchEditingController = TextEditingController();
+
+  // pagination dec..
   int _page = 1;
   final Rx<bool> _isLoadingMore = false.obs;
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController searchEditingController = TextEditingController();
 
   void _setTrendingPhotos(ApiResponse<List<PhotosModel>> updatedTrendPhotos) {
-    if (trendPhotos.value.data != null && updatedTrendPhotos.data != null) {
+    if (trendPhotos.value.data != null &&
+        updatedTrendPhotos.data != null &&
+        _page > 1) {
       trendPhotos.value = ApiResponse.completed(
         trendPhotos.value.data! + updatedTrendPhotos.data!,
       );
-    } else if (updatedTrendPhotos.data != null) {
+    } else if (updatedTrendPhotos.data != null && _page == 1) {
       trendPhotos.value = updatedTrendPhotos;
     }
   }
@@ -37,14 +41,14 @@ class TrendXController extends GetxController {
       // Process the fetched data to remove duplicates
       List<PhotosModel> uniquePhotos = data.photos.toSet().toList();
 
-      if (_page == 1) {
-        _setTrendingPhotos(ApiResponse.completed(uniquePhotos));
-      } else {
-        _setTrendingPhotos(
-          ApiResponse.completed(trendPhotos.value.data =
-              (trendPhotos.value.data ?? []) + uniquePhotos),
-        );
-      }
+      // if (_page == 1) {
+      _setTrendingPhotos(ApiResponse.completed(uniquePhotos));
+      // } else {
+      //   _setTrendingPhotos(
+      //     ApiResponse.completed(trendPhotos.value.data =
+      //         (trendPhotos.value.data ?? []) + uniquePhotos),
+      //   );
+      // }
 
       _page++;
       _isLoadingMore.value = false;
@@ -97,6 +101,7 @@ class TrendXController extends GetxController {
 // getters
   ScrollController get scrollController => _scrollController;
   Rx<bool> get loadMore => _isLoadingMore;
+  int get page => _page;
 }
 
 // class TrendXController extends GetxController {
