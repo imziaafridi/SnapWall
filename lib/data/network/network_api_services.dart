@@ -14,6 +14,7 @@ class NetworkApiService implements BaseApiServices {
   /// Sends a GET request to the specified [url] and returns the response.
   /// Throws a [NoInternetException] if there is no internet connection.
   /// Throws a [FetchDataException] if the network request times out.
+
   @override
   Future<dynamic> getApi(String url, Map<String, String> headers) async {
     if (kDebugMode) {

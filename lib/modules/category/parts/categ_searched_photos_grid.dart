@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:snapwall/configs/color/color.dart';
-import 'package:snapwall/configs/components/body_text_widget.dart';
 import 'package:snapwall/configs/components/glass_morphism.dart';
 import 'package:snapwall/configs/components/load_more_widget.dart';
 import 'package:snapwall/configs/components/loading_widget.dart';
@@ -25,10 +24,10 @@ class CategSearchedPhotosGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return categXController.categSearchPhotosList.value.data!.isNotEmpty
-        ? Obx(
-            () {
-              return Stack(
+    return Obx(
+      () {
+        return categXController.categSearchPhotosList.value.data!.isNotEmpty
+            ? Stack(
                 children: [
                   MasonryGridView.builder(
                     controller: categXController.scrollControllerCateg,
@@ -76,14 +75,15 @@ class CategSearchedPhotosGrid extends StatelessWidget {
                   // auto scroll upword button - scroll-controller
                   AutoScrollUpButtonWidget(categXController: categXController),
 
+                  // loading more ... pagination or infinity scroll
                   if (categXController.loadMoreCateg.value &&
                       categXController.page > 1)
                     const LoadMoreWidget()
                 ],
-              );
-            },
-          )
-        : const Center(child: LoadingWidget());
+              )
+            : const Center(child: LoadingWidget());
+      },
+    );
   }
 }
 

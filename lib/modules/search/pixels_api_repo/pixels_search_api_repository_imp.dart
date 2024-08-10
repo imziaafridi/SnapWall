@@ -10,12 +10,16 @@ class PixelsSearchApiRepositoryImp implements PixelsSearchApiRepository {
   final _apiServices = NetworkApiService();
 
   @override
-  Future<PhotosSearchModel> fetchSearchPhotos(dynamic data) async {
+  Future<PhotosSearchModel> fetchSearchPhotos(dynamic data, int page) async {
     final response = await _apiServices.getApi(
       PixelApiUrls.SEARCH_URL +
           PixelApiUrls.query +
           PixelApiUrls.equalTo +
-          data,
+          data +
+          PixelApiUrls.nd +
+          PixelApiUrls.page +
+          PixelApiUrls.equalTo +
+          PixelApiUrls.getPage(page),
       headers,
     );
     return PhotosSearchModel.fromJson(response);

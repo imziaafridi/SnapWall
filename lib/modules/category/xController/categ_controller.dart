@@ -104,10 +104,16 @@ class CategXController extends GetxController {
   @override
   void onInit() {
     _scrollControllerCategSearch.addListener(() {
-      scrollListenerCateg();
+      if (categLabel.value.isNotEmpty == true) {
+        scrollListenerCateg();
+      }
       _scrollNotifier.value = _scrollControllerCategSearch.offset;
     });
-    fetchCategSearchPhotosData(_categLabel.value);
+    if (categLabel.value.isNotEmpty == true) {
+      fetchCategSearchPhotosData(_categLabel.value);
+    } else {
+      debugPrint('categ search is empty');
+    }
     super.onInit();
   }
 

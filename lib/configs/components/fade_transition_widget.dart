@@ -31,7 +31,9 @@ class _FadeTransitionWidgetState extends State<FadeTransitionWidget>
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: widget.delay ?? 200), () {
-      _controller.forward();
+      if (mounted) {
+        _controller.forward();
+      }
     });
   }
 

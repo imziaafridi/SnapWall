@@ -44,7 +44,7 @@ class TrendPhotosGrid extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 if (index < data.length) {
-                  String photo = data[index].src.portrait;
+                  PhotosModel photosModel = data[index];
                   return GestureDetector(
                     onTap: () => Get.to(
                       () => SnapWallHomeDetailView(
@@ -58,7 +58,7 @@ class TrendPhotosGrid extends StatelessWidget {
                       child: Stack(
                         children: [
                           NetworkCacheImageWithTransitionEffect(
-                            imageUrl: photo,
+                            imageUrl: photosModel.src.portrait,
                           ),
                           Positioned(
                               top: 0.0,
@@ -67,11 +67,11 @@ class TrendPhotosGrid extends StatelessWidget {
                                 return FavouriteButtonWidget(
                                   onTap: () {
                                     favouritesXController.toggleFavourite(
-                                      photo,
+                                      photosModel.src.portrait,
                                     );
                                   },
                                   isLiked: favouritesXController.isFavourite(
-                                    photo,
+                                    photosModel.src.portrait,
                                   ),
                                 );
                               })),

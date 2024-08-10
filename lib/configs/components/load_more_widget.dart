@@ -22,10 +22,10 @@ class LoadMoreWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: context.mqw * (leftPosition ?? 0.29),
-      right: context.mqw * (rightPosition ?? .29),
+      left: context.mqw * (leftPosition ?? 0.28),
+      right: context.mqw * (rightPosition ?? .28),
       top: context.mqh * (topPosition ?? .26),
-      bottom: context.mqh * (bottomPosition ?? .43),
+      bottom: context.mqh * (bottomPosition ?? .26),
       child: GlassMorphism(
         blur: 2.8,
         opacity: .4,

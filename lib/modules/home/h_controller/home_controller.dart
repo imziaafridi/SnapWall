@@ -10,7 +10,6 @@ class TrendXController extends GetxController {
 
   Rx<ApiResponse<List<PhotosModel>>> trendPhotos =
       ApiResponse<List<PhotosModel>>.loading().obs;
-  final TextEditingController searchEditingController = TextEditingController();
 
   // pagination dec..
   int _page = 1;
@@ -33,7 +32,7 @@ class TrendXController extends GetxController {
     if (_isLoadingMore.value) return;
     _isLoadingMore.value = true;
     _setTrendingPhotos(ApiResponse.loading());
-    _pixelsApiRepositoryImp
+    await _pixelsApiRepositoryImp
         .fetchPhotosList(
       page: _page,
     )
@@ -94,7 +93,7 @@ class TrendXController extends GetxController {
   @override
   void dispose() {
     _scrollController.dispose();
-    searchEditingController.dispose();
+    // searchEditingController.dispose();
     super.dispose();
   }
 
